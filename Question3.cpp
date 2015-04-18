@@ -34,7 +34,18 @@ public:
 
 bool Fraction::operator>(Fraction& F)
 {
+	if (denom != F.denom)                                 //we can only compare the numerators if
+	{                                                 //the denominators are the same
+		num *= F.denom;                               //therefore establish a common denominator
+		F.num *= denom;
+		denom *= F.denom;
+		F.denom = denom;
+	}
 
+	if (num > F.num)                                 
+		return true;
+	else
+		return false;
 }
 
 Fraction Fraction::add(int num1, Fraction F2)
