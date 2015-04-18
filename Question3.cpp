@@ -23,39 +23,78 @@ private:
 	int num;				// numerator;
 	int denom;				// denominator;
 public:
-	Fraction();
-	Fraction(int n, int d) : num(n), denom(d) { };
+	Fraction(){};
+	Fraction(int n, int d) { num = n; denom = d; };
 	void print() { cout << num << "/" << denom; };
 	                                        
 	bool operator>(Fraction& F);                       //operator overloading
-	Fraction add(int, Fraction);                       //Function overloading-Accepting data types
-	Fraction add(Fraction, int);                       //in any order
+	
+	static Fraction add(int num1, Fraction F2)
+	{
+		F2.num += num1*F2.denom;
+		return F2;
+	}
+
+	static Fraction add(Fraction F3, int num2)
+	{
+		F3.num += num2*F3.denom;
+		return F3;
+	}
 };
 
 bool Fraction::operator>(Fraction& F)
 {
-	if (denom != F.denom)                                 //we can only compare the numerators if
-	{                                                 //the denominators are the same
-		num *= F.denom;                               //therefore establish a common denominator
-		F.num *= denom;
-		denom *= F.denom;
-		F.denom = denom;
+	Fraction Fa, Fb;                                          //Copy original fractions into new addresses
+	Fa.num = num; Fa.denom = denom;                           //this way we don't alter the way the
+	Fb.num = F.num; Fb.denom = F.denom;                       //original fractions look when comparing
+	
+	if (Fa.denom != Fb.denom)                                 //we can only compare the numerators if
+	{                                                         //the denominators are the same
+		Fa.num *= Fb.denom;                                   //therefore establish a common denominator
+		Fb.num *= Fa.denom;                                   //then compare the numerators
+		Fa.denom *= Fb.denom;
+		Fb.denom = Fa.denom;
 	}
 
-	if (num > F.num)                                 
+	if (Fa.num > Fb.num)                                 
 		return true;
 	else
 		return false;
 }
 
-Fraction Fraction::add(int num1, Fraction F2)
-{
-	F2.num += num1*F2.denom;
-	return F2;
-}
 
-Fraction Fraction::add(Fraction F3, int num2)
+
+int main()
 {
-	F3.num += num2*F3.denom;
-	return F3;
+	Fraction F1(1, 7);
+	Fraction F2(5, 9);
+	Fraction ans1, ans2;
+	int num1 = 5;
+	
+	ans1 = Fraction::add(F1, num1);
+	cout << "Addition with fraction First = ";
+	ans1.print();
+	ans2 = Fraction::add(num1, F1);
+	cout << "\n\nAddition with integer First = ";
+	ans2.print();
+
+	if (F1 > F2)
+	{
+		cout << "\n\n";
+		F1.print();
+		cout << " is greater than ";
+		F2.print();
+	}
+	else
+	{
+		cout << "\n\n";
+		F2.print();
+		cout << " is greater than ";
+		F1.print();
+	}
+
+	cout << "\n\n\n";
+
+	system("Pause");
+	return 0;
 }
